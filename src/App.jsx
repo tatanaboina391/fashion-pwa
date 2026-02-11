@@ -12,7 +12,6 @@ import SareeColorCustomization from './pages/SareeColorCustomization';
 import Saree360View from './pages/Saree360View';
 import './App.css';
 
-
 function App() {
   return (
     <Router>
