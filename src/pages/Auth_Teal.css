@@ -1,0 +1,129 @@
+/* New Ethnic Wear Customization Auth Styles */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f8ff; /* Light bluish background like image */
+  font-family: 'Inter', sans-serif;
+  padding: 1rem;
+}
+
+.auth-card {
+  background: white;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: slideUp 0.5s ease-out;
+}
+
+.auth-header-teal {
+  background-color: #00bfa5; /* The specific teal color */
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: white;
+}
+
+.auth-title-large {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle-teal {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.auth-body {
+  padding: 2rem;
+}
+
+/* Segmented Toggle */
+.auth-toggle-container {
+  background-color: #e0f7fa; /* Very light teal bg for toggle track */
+  border-radius: 30px;
+  padding: 4px;
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.auth-toggle-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px;
+  border-radius: 25px;
+  font-weight: 600;
+  color: #00695c;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.auth-toggle-btn.active {
+  background-color: #00bfa5;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 191, 165, 0.3);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label-teal {
+  display: block;
+  color: #00897b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-input-teal {
+  width: 100%;
+  padding: 12px 15px;
+  background-color: #f5f7fa; /* Light grey/blue input bg */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #333;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-input-teal::placeholder {
+  color: #9aa5b1;
+}
+
+.form-input-teal:focus {
+  border-color: #00bfa5;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.1);
+}
+
+.btn-teal {
+  width: 100%;
+  padding: 14px;
+  background-color: #00bfa5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 1rem;
+}
+
+.btn-teal:hover {
+  background-color: #00a09d;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
