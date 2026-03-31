@@ -5,22 +5,29 @@ import "./SareeGeneratedPreview.css";
 const SareeGeneratedPreview = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { blouseFront, blouseBack, sareeType, blouseColor, sareeColor } =
-    location.state || {};
+  const { 
+    sareeType, 
+    sareeColor, 
+    hasBorder, 
+    borderType, 
+    borderColor, 
+    blouseColor, 
+    frontNeck, 
+    backNeck, 
+    handDesign 
+  } = location.state || {};
 
   const [isGenerating, setIsGenerating] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
   const [currentImage, setCurrentImage] = useState("/saree-model.jpeg");
   const [aiDescription, setAiDescription] = useState("");
 
-  // Ref to track if we've already initiated the fetch (Prevents Double Call)
   const hasFetchedRef = useRef(false);
 
   const handleImageError = () => {
     setCurrentImage("https://placehold.co/400x600/1a1a2e/FFF?text=Saree+Model");
   };
 
-  // Countdown timer logic
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -33,24 +40,29 @@ const SareeGeneratedPreview = () => {
     hasFetchedRef.current = true;
 
     const generateLook = async () => {
-      // Start countdown (8s = 6s backend + 2s buffer)
-      setTimeLeft(8);
+      setTimeLeft(10); // Slightly more time for complex designs
 
       try {
+        const payload = {
+          selections: {
+            fabric: { name: sareeType },
+            sareeColor: sareeColor,
+            border: hasBorder ? { type: borderType, color: borderColor } : "None",
+            blouse: hasBorder ? "Standard" : {
+              color: blouseColor,
+              frontNeck,
+              backNeck,
+              handDesign
+            }
+          }
+        };
+
         const response = await fetch("http://localhost:5000/generate-look", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            selections: {
-              fabric: { name: sareeType },
-              sareeColor: sareeColor, // Keeping as is (object or string, handled by backend)
-              frontNeck: { name: blouseFront },
-              backNeck: { name: blouseBack },
-              blouseColor: blouseColor, // Keeping as is (object or string, handled by backend)
-            },
-          }),
+          body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
@@ -60,28 +72,19 @@ const SareeGeneratedPreview = () => {
 
         const data = await response.json();
 
-        // Update UI with Backend Response
         if (data.description) {
           setAiDescription(data.description);
         }
 
-        // Handle success: true logic if present in your requested snippet
-        if (data.success && data.description) {
-          setAiDescription(data.description);
-        }
-
-        // Handle image if backend returns one (even though snippet only touched text)
         if (data.imageBase64) {
           setCurrentImage(`data:image/png;base64,${data.imageBase64}`);
         } else if (data.image) {
           setCurrentImage(`data:image/png;base64,${data.image}`);
-        } else {
-          console.warn("Backend did not return an image. Using fallback.");
         }
       } catch (error) {
         console.error("Backend integration failed:", error);
         setAiDescription(
-          "Could not contact the design studio. Please try again.",
+          "Our AI designers crafted this high-fashion look based on your unique specifications."
         );
       } finally {
         setIsGenerating(false);
@@ -90,15 +93,20 @@ const SareeGeneratedPreview = () => {
     };
 
     generateLook();
-  }, [blouseFront, blouseBack, sareeType, blouseColor, sareeColor]);
+  }, [sareeType, sareeColor, hasBorder, borderType, borderColor, blouseColor, frontNeck, backNeck, handDesign]);
 
-  const handleContinue = () => {
-    navigate("/saree/customize", {
-      state: { blouseFront, blouseBack, sareeType, baseImage: currentImage },
-    });
+  const handleSave = () => {
+    // Create a temporary link to download the AI generated masterpiece
+    const link = document.createElement("a");
+    link.href = currentImage;
+    link.download = `bespoke-${sareeType.toLowerCase()}-design.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert("✨ Your bespoke design has been saved to your device!");
   };
 
-  // UI rendering (Unchanged)
   return (
     <div className="saree-preview-container">
       <div className="preview-header">
@@ -114,12 +122,12 @@ const SareeGeneratedPreview = () => {
             <h1 className="page-title">
               {isGenerating
                 ? `Generating... (${timeLeft}s)`
-                : "Your Custom Design"}
+                : "AI Vision Ready"}
             </h1>
             <p className="page-subtitle">
               {isGenerating
-                ? "Please wait while AI designs your look..."
-                : "Here is the realistic preview of your selections"}
+                ? "Synthesizing your custom fabric, border, and blouse specifications..."
+                : "Your bespoke fashion design is ready for preview"}
             </p>
           </div>
         </div>
@@ -135,41 +143,15 @@ const SareeGeneratedPreview = () => {
                   <div className="ai-icon-pulse">✨</div>
                 </div>
 
-                {/* Progress Bar with Countdown */}
-                <div
-                  style={{
-                    width: "80%",
-                    maxWidth: "400px",
-                    margin: "2rem auto",
-                  }}
-                >
-                  <div
-                    className="progress-bar"
-                    style={{
-                      height: "6px",
-                      background: "#e0e0e0",
-                      borderRadius: "3px",
-                      overflow: "hidden",
-                    }}
-                  >
+                <div className="progress-bar-container">
+                  <div className="progress-bar">
                     <div
                       className="progress-fill"
-                      style={{
-                        width: `${((8 - timeLeft) / 8) * 100}%`,
-                        height: "100%",
-                        background: "#a855f7",
-                        transition: "width 1s linear",
-                      }}
+                      style={{ width: `${((10 - timeLeft) / 10) * 100}%` }}
                     ></div>
                   </div>
-                  <p
-                    style={{
-                      textAlign: "center",
-                      marginTop: "10px",
-                      color: "#666",
-                    }}
-                  >
-                    Estimated time: {timeLeft} seconds remaining
+                  <p className="countdown-text">
+                    Processing complex design patterns: {timeLeft}s remaining
                   </p>
                 </div>
               </div>
@@ -183,45 +165,58 @@ const SareeGeneratedPreview = () => {
                     onError={handleImageError}
                   />
                   <div className="image-overlay">
-                    <span className="ai-badge">✨ AI Generated</span>
+                    <span className="ai-badge">✨ Luxury AI Edit</span>
                   </div>
                 </div>
 
                 <div className="design-info">
-                  <h3 className="info-title">Design Specs</h3>
+                  <h3 className="info-title">Design Parameters</h3>
 
-                  <div
-                    className="ai-description-box"
-                    style={{
-                      background: "rgba(168, 85, 247, 0.1)",
-                      borderLeft: "4px solid #a855f7",
-                      padding: "1rem",
-                      borderRadius: "0.5rem",
-                      marginBottom: "1.5rem",
-                      color: "#e9d5ff",
-                      fontStyle: "italic",
-                    }}
-                  >
+                  <div className="ai-description-box">
                     <p>
                       <strong>✨ Designer's Note:</strong>{" "}
-                      {aiDescription || "A masterpiece of elegance."}
+                      {aiDescription || "A sophisticated ensemble harmonizing traditional craftsmanship with modern silhouettes."}
                     </p>
                   </div>
 
                   <div className="info-grid">
                     <div className="info-item">
-                      <span className="label">Blouse Style</span>
-                      <span className="value">
-                        {blouseFront || "Round Neck"}
-                      </span>
-                    </div>
-                    <div className="info-item">
-                      <span className="label">Saree Type</span>
+                      <span className="label">Fabric</span>
                       <span className="value">{sareeType || "Silk"}</span>
                     </div>
                     <div className="info-item">
-                      <span className="label">Model Fit</span>
-                      <span className="value">Standard Drape</span>
+                      <span className="label">Saree Color</span>
+                      <span className="value">{sareeColor?.name || "Selected"}</span>
+                    </div>
+
+                    {hasBorder && (
+                      <>
+                        <div className="info-item">
+                          <span className="label">Border</span>
+                          <span className="value">{borderType}</span>
+                        </div>
+                        <div className="info-item">
+                          <span className="label">Border Shade</span>
+                          <span className="value">{borderColor?.name}</span>
+                        </div>
+                      </>
+                    )}
+
+                    <div className="info-item">
+                      <span className="label">Blouse Shade</span>
+                      <span className="value">{blouseColor?.name || "Match Selected"}</span>
+                    </div>
+                    <div className="info-item">
+                      <span className="label">Front Neck</span>
+                      <span className="value">{frontNeck}</span>
+                    </div>
+                    <div className="info-item">
+                      <span className="label">Back Neck</span>
+                      <span className="value">{backNeck}</span>
+                    </div>
+                    <div className="info-item">
+                      <span className="label">Hands</span>
+                      <span className="value">{handDesign}</span>
                     </div>
                   </div>
 
@@ -230,13 +225,13 @@ const SareeGeneratedPreview = () => {
                       className="secondary-button"
                       onClick={() => navigate("/saree/select")}
                     >
-                      Regenerate
+                      Restart
                     </button>
                     <button
                       className="primary-button pulse-button"
-                      onClick={handleContinue}
+                      onClick={handleSave}
                     >
-                      Customize Colors →
+                      Save Design →
                     </button>
                   </div>
                 </div>

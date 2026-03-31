@@ -4,10 +4,10 @@ import './SareePencilSketch.css';
 const SareePencilSketch = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { blouseFront, blouseBack, sareeType } = location.state || {};
+  const { sareeType, hasBorder } = location.state || {};
 
   // If no selections, redirect back
-  if (!blouseFront || !blouseBack || !sareeType) {
+  if (!sareeType) {
     navigate('/saree/select');
     return null;
   }
@@ -15,9 +15,8 @@ const SareePencilSketch = () => {
   const handleContinueToColor = () => {
     navigate('/saree/customize', {
       state: {
-        blouseFront,
-        blouseBack,
-        sareeType
+        sareeType,
+        hasBorder
       }
     });
   };
@@ -31,8 +30,8 @@ const SareePencilSketch = () => {
             ← Back to Selection
           </button>
           <div className="header-content fade-in">
-            <h1 className="page-title">Your Saree Design Preview</h1>
-            <p className="page-subtitle">Pencil sketch based on your selections</p>
+            <h1 className="page-title">Your Saree Concept</h1>
+            <p className="page-subtitle">A hand-drawn sketch of your selection</p>
           </div>
         </div>
       </div>
@@ -41,27 +40,20 @@ const SareePencilSketch = () => {
         <div className="container">
           {/* Selection Details */}
           <div className="selection-details fade-in">
-            <h3 className="details-title">Your Selections</h3>
+            <h3 className="details-title">Design Breakdown</h3>
             <div className="details-grid">
-              <div className="detail-item">
-                <span className="detail-icon">👚</span>
-                <div className="detail-info">
-                  <span className="detail-label">Front Neck</span>
-                  <span className="detail-value">{blouseFront}</span>
-                </div>
-              </div>
-              <div className="detail-item">
-                <span className="detail-icon">👗</span>
-                <div className="detail-info">
-                  <span className="detail-label">Back Neck</span>
-                  <span className="detail-value">{blouseBack}</span>
-                </div>
-              </div>
               <div className="detail-item">
                 <span className="detail-icon">🥻</span>
                 <div className="detail-info">
-                  <span className="detail-label">Saree Type</span>
+                  <span className="detail-label">Fabric Style</span>
                   <span className="detail-value">{sareeType}</span>
+                </div>
+              </div>
+              <div className="detail-item">
+                <span className="detail-icon">✨</span>
+                <div className="detail-info">
+                  <span className="detail-label">Border Preference</span>
+                  <span className="detail-value">{hasBorder ? 'With Border' : 'No Border'}</span>
                 </div>
               </div>
             </div>

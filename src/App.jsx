@@ -10,6 +10,7 @@ import SareePencilSketch from './pages/SareePencilSketch';
 import SareeGeneratedPreview from './pages/SareeGeneratedPreview';
 import SareeColorCustomization from './pages/SareeColorCustomization';
 import Saree360View from './pages/Saree360View';
+import HalfSareeSelection from './pages/HalfSareeSelection';
 import './App.css';
 
 function App() {
@@ -29,6 +30,8 @@ function App() {
           <Route path="/saree/preview" element={<SareeGeneratedPreview />} />
           <Route path="/saree/customize" element={<SareeColorCustomization />} />
           <Route path="/saree/360-view" element={<Saree360View />} />
+          {/* Half Saree Flow */}
+          <Route path="/half-saree/select" element={<HalfSareeSelection />} />
         </Routes>
       </div>
     </Router>

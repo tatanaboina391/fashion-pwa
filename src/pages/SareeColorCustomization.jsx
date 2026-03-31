@@ -45,7 +45,7 @@ const colorPalette = {
 const SareeColorCustomization = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { blouseFront, blouseBack, sareeType, baseImage } = location.state || {}; // receiving baseImage
+  const { sareeType, hasBorder, baseImage } = location.state || {}; // receiving baseImage
   
   // Using a verified local image of a model in a saree
   const [currentImage, setCurrentImage] = useState(baseImage || "/saree-model.jpeg");
@@ -55,19 +55,41 @@ const SareeColorCustomization = () => {
     setCurrentImage("https://placehold.co/600x800/222/fff?text=Model+View");
   };
 
-  //... (rest of the code)
+  const [activeSection, setActiveSection] = useState('saree');
+  const [selectedBlouseColor, setSelectedBlouseColor] = useState(null);
+  const [selectedSareeColor, setSelectedSareeColor] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
-  // Ensure palette is always visible on desktop, or toggles on mobile
-  const [isPaletteOpen, setIsPaletteOpen] = useState(true);
+  useEffect(() => {
+    if (isUpdating) {
+      const timer = setTimeout(() => setIsUpdating(false), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isUpdating]);
 
-  //...
+  const handleBlouseClick = () => setActiveSection('blouse');
+  const handleSareeClick = () => setActiveSection('saree');
+
+  const isComplete = selectedBlouseColor && selectedSareeColor;
+
+  const handleContinueTo360 = () => {
+    navigate('/saree/360-view', {
+      state: {
+        sareeType,
+        hasBorder,
+        blouseColor: selectedBlouseColor,
+        sareeColor: selectedSareeColor,
+        finalImage: currentImage
+      }
+    });
+  };
 
   return (
     <div className="color-customization-container">
       {/* Header */}
       <div className="color-header">
         <div className="container">
-          <button onClick={() => navigate('/saree/preview', { state: { blouseFront, blouseBack, sareeType } })} className="back-button">
+          <button onClick={() => navigate('/saree/preview', { state: { sareeType, hasBorder } })} className="back-button">
             ← Back to Preview
           </button>
           <div className="header-content fade-in">

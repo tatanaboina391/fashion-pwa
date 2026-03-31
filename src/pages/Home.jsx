@@ -36,9 +36,10 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleCategoryClick = (categoryId) => {
-    // Redirect Saree category to the new customization flow
     if (categoryId === 'saree') {
       navigate('/saree/select');
+    } else if (categoryId === 'half-saree') {
+      navigate('/half-saree/select');
     } else {
       navigate(`/category/${categoryId}`);
     }

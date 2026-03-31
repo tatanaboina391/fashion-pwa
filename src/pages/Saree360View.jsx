@@ -5,7 +5,7 @@ import './Saree360View.css';
 const Saree360View = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { blouseFront, blouseBack, sareeType, blouseColor, sareeColor, finalImage } = location.state || {}; // Receiving finalImage
+  const { sareeType, blouseColor, sareeColor, hasBorder, finalImage } = location.state || {}; // Receiving finalImage
 
   // State for the image with error handling
   const [currentImage, setCurrentImage] = useState(finalImage || "/saree-model.jpeg");
@@ -15,7 +15,7 @@ const Saree360View = () => {
   };
 
   // If no selections, redirect back
-  if (!blouseFront) {
+  if (!sareeType) {
     navigate('/saree/select');
     return null;
   }
@@ -87,7 +87,7 @@ const Saree360View = () => {
         <div className="container">
           <button 
             onClick={() => navigate('/saree/customize', { 
-              state: { blouseFront, blouseBack, sareeType, baseImage: currentImage } 
+              state: { sareeType, sareeColor, blouseColor, hasBorder, baseImage: currentImage } 
             })} 
             className="back-button"
           >
@@ -106,13 +106,10 @@ const Saree360View = () => {
           <div className="design-summary fade-in">
             <div className="summary-grid">
               <div className="summary-card">
-                <span className="summary-icon">👚</span>
+                <span className="summary-icon">✨</span>
                 <div className="summary-info">
-                  <span className="summary-label">Blouse</span>
-                  <span className="summary-value">{blouseFront}</span>
-                  <div className="color-indicator" style={{ backgroundColor: blouseColor?.value }}>
-                    {blouseColor?.name}
-                  </div>
+                  <span className="summary-label">Border Style</span>
+                  <span className="summary-value">{hasBorder ? 'With Border' : 'No Border'}</span>
                 </div>
               </div>
               <div className="summary-card">
