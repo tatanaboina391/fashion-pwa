@@ -571,33 +571,73 @@ const HalfSareeSelection = () => {
                 <div className="hs-blouse-design-row">
                   <div className="hs-col">
                     <h3 className="hs-col-title">Front Neck</h3>
-                    <div className="hs-design-options">
-                      {blouseTypes.frontNeck.map((n, i) => (
-                        <div key={i} className={`hs-design-pill ${frontNeck === n ? 'selected' : ''}`} onClick={() => setFrontNeck(n)}>
-                          {n}
+                    <div className="hs-design-card-grid">
+                      {[
+                        { name: 'Round neck',      img: '/blouse-references/front-round-neck.png' },
+                        { name: 'Deep round neck', img: '/blouse-references/front-deep-round-neck.png' },
+                        { name: 'Sweetheart neck', img: '/blouse-references/front-sweetheart-neck.png' },
+                        { name: 'V-neck',          img: '/blouse-references/front-v-neck.png' },
+                        { name: 'Boat neck',       img: '/blouse-references/front-boat-neck.png' },
+                      ].map((d, i) => (
+                        <div key={i} className={`hs-design-select-card ${frontNeck === d.name ? 'selected' : ''}`} onClick={() => setFrontNeck(d.name)}>
+                          <div className="hs-ds-card-img"><img src={d.img} alt={d.name} /></div>
+                          <span className="hs-ds-card-name">{d.name}</span>
                         </div>
                       ))}
                     </div>
+                    <p className="hs-ds-more-label">More styles:</p>
+                    <div className="hs-ds-chip-row">
+                      {['U-neck', 'Deep V-neck', 'High neck', 'Collar neck', 'Square neck', 'Halter neck', 'Keyhole neck', 'Scalloped neck', 'Asymmetrical neck', 'Princess cut neck', 'Shirt-style neck', 'Illusion neck (net)', 'Angrakha neck', 'One-shoulder neck'].map((n, i) => (
+                        <button key={i} className={`hs-ds-chip ${frontNeck === n ? 'selected' : ''}`} onClick={() => setFrontNeck(n)}>{n}</button>
+                      ))}
+                    </div>
+                    {frontNeck && <p className="hs-ds-selected-badge">✓ Selected: <strong>{frontNeck}</strong></p>}
                   </div>
                   <div className="hs-col">
                     <h3 className="hs-col-title">Back Neck</h3>
-                    <div className="hs-design-options">
-                      {blouseTypes.backNeck.map((n, i) => (
-                        <div key={i} className={`hs-design-pill ${backNeck === n ? 'selected' : ''}`} onClick={() => setBackNeck(n)}>
-                          {n}
+                    <div className="hs-design-card-grid">
+                      {[
+                        { name: 'Deep U-back',     img: '/blouse-references/back-deep-u-back.png' },
+                        { name: 'Deep V-back',     img: '/blouse-references/back-deep-v-back.png' },
+                        { name: 'Round back neck', img: '/blouse-references/back-round-back-neck.png' },
+                        { name: 'Backless blouse', img: '/blouse-references/back-backless-blouse.png' },
+                      ].map((d, i) => (
+                        <div key={i} className={`hs-design-select-card ${backNeck === d.name ? 'selected' : ''}`} onClick={() => setBackNeck(d.name)}>
+                          <div className="hs-ds-card-img"><img src={d.img} alt={d.name} /></div>
+                          <span className="hs-ds-card-name">{d.name}</span>
                         </div>
                       ))}
                     </div>
+                    <p className="hs-ds-more-label">More styles:</p>
+                    <div className="hs-ds-chip-row">
+                      {['Square back neck', 'Tie-up (Dori) back', 'Keyhole back', 'Cut-out back', 'String back', 'Bow-tie back', 'Zip back neck', 'Buttoned back', 'Corset back', 'Sheer / net back', 'Criss-cross back', 'Potli button back', 'Temple design back', 'Tattoo-style back', 'Peep-hole back'].map((n, i) => (
+                        <button key={i} className={`hs-ds-chip ${backNeck === n ? 'selected' : ''}`} onClick={() => setBackNeck(n)}>{n}</button>
+                      ))}
+                    </div>
+                    {backNeck && <p className="hs-ds-selected-badge">✓ Selected: <strong>{backNeck}</strong></p>}
                   </div>
                   <div className="hs-col">
                     <h3 className="hs-col-title">Sleeve Style</h3>
-                    <div className="hs-design-options">
-                      {blouseTypes.handDesign.map((n, i) => (
-                        <div key={i} className={`hs-design-pill ${handDesign === n ? 'selected' : ''}`} onClick={() => setHandDesign(n)}>
-                          {n}
+                    <div className="hs-design-card-grid">
+                      {[
+                        { name: 'Regular short', img: '/blouse-references/hand-regular-short.png' },
+                        { name: 'Elbow length',  img: '/blouse-references/hand-elbow-length.png' },
+                        { name: 'Full sleeves',  img: '/blouse-references/hand-full-sleeves.png' },
+                        { name: 'Puff sleeves',  img: '/blouse-references/hand-puff-sleeves.png' },
+                      ].map((d, i) => (
+                        <div key={i} className={`hs-design-select-card ${handDesign === d.name ? 'selected' : ''}`} onClick={() => setHandDesign(d.name)}>
+                          <div className="hs-ds-card-img"><img src={d.img} alt={d.name} /></div>
+                          <span className="hs-ds-card-name">{d.name}</span>
                         </div>
                       ))}
                     </div>
+                    <p className="hs-ds-more-label">More styles:</p>
+                    <div className="hs-ds-chip-row">
+                      {['Bell sleeves', 'Cap sleeves', 'Three-quarter', 'Flared sleeves', 'Sleeveless', 'Cold shoulder', 'Ruffle sleeves', 'Brocade sleeves'].map((n, i) => (
+                        <button key={i} className={`hs-ds-chip ${handDesign === n ? 'selected' : ''}`} onClick={() => setHandDesign(n)}>{n}</button>
+                      ))}
+                    </div>
+                    {handDesign && <p className="hs-ds-selected-badge">✓ Selected: <strong>{handDesign}</strong></p>}
                   </div>
                 </div>
 

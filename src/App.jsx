@@ -11,6 +11,9 @@ import SareeGeneratedPreview from './pages/SareeGeneratedPreview';
 import SareeColorCustomization from './pages/SareeColorCustomization';
 import Saree360View from './pages/Saree360View';
 import HalfSareeSelection from './pages/HalfSareeSelection';
+import LehangaSelection from './pages/LehangaSelection';
+import AdminPanel from './pages/AdminPanel';
+import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -32,7 +35,12 @@ function App() {
           <Route path="/saree/360-view" element={<Saree360View />} />
           {/* Half Saree Flow */}
           <Route path="/half-saree/select" element={<HalfSareeSelection />} />
+          {/* Lehanga Flow */}
+          <Route path="/lehanga/select" element={<LehangaSelection />} />
+          {/* Admin / Management Panel */}
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

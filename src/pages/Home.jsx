@@ -40,6 +40,8 @@ const Home = () => {
       navigate('/saree/select');
     } else if (categoryId === 'half-saree') {
       navigate('/half-saree/select');
+    } else if (categoryId === 'lehanga') {
+      navigate('/lehanga/select');
     } else {
       navigate(`/category/${categoryId}`);
     }
@@ -121,20 +123,6 @@ const Home = () => {
               <h3 className="feature-title">Custom Designs</h3>
               <p className="feature-description">
                 Personalize every detail to match your unique style
-              </p>
-            </div>
-            <div className="feature-card fade-in" style={{ animationDelay: '0.1s' }}>
-              <div className="feature-icon">✨</div>
-              <h3 className="feature-title">Premium Quality</h3>
-              <p className="feature-description">
-                Handcrafted with the finest materials and attention to detail
-              </p>
-            </div>
-            <div className="feature-card fade-in" style={{ animationDelay: '0.2s' }}>
-              <div className="feature-icon">🚀</div>
-              <h3 className="feature-title">Fast Delivery</h3>
-              <p className="feature-description">
-                Quick turnaround time without compromising on quality
               </p>
             </div>
           </div>

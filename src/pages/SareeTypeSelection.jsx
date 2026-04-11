@@ -5,21 +5,48 @@ import './SareeTypeSelection.css';
 // ─────────────────────────────────────────────────
 //  BLOUSE TYPES
 // ─────────────────────────────────────────────────
-const blouseTypes = {
+// Designs WITH unique high-quality studio photos
+const blousePhotoDesigns = {
   frontNeck: [
-    'Round neck', 'Deep round neck', 'U-neck', 'Sweetheart neck',
-    'V-neck', 'Deep V-neck', 'Boat neck', 'High neck',
-    'Collar neck', 'Square neck', 'Halter neck', 'Keyhole neck',
-    'Scalloped neck', 'Asymmetrical neck', 'Princess cut neck',
-    'Shirt-style neck', 'Illusion neck (net)', 'Angrakha neck', 'One-shoulder neck'
+    { name: 'Round neck',       img: '/blouse-references/front-round-neck.png' },
+    { name: 'Deep round neck',  img: '/blouse-references/front-deep-round-neck.png' },
+    { name: 'Sweetheart neck',  img: '/blouse-references/front-sweetheart-neck.png' },
+    { name: 'V-neck',           img: '/blouse-references/front-v-neck.png' },
+    { name: 'Boat neck',        img: '/blouse-references/front-boat-neck.png' },
   ],
   backNeck: [
-    'Deep U-back', 'Deep V-back', 'Round back neck', 'Square back neck',
-    'Backless blouse', 'Tie-up (Dori) back', 'Keyhole back', 'Cut-out back',
+    { name: 'Deep U-back',      img: '/blouse-references/back-deep-u-back.png' },
+    { name: 'Deep V-back',      img: '/blouse-references/back-deep-v-back.png' },
+    { name: 'Round back neck',  img: '/blouse-references/back-round-back-neck.png' },
+    { name: 'Backless blouse',  img: '/blouse-references/back-backless-blouse.png' },
+  ],
+};
+
+// All additional designs (no unique photo yet) — shown as text chips
+const blouseExtraDesigns = {
+  frontNeck: [
+    'U-neck', 'Deep V-neck', 'High neck', 'Collar neck', 'Square neck',
+    'Halter neck', 'Keyhole neck', 'Scalloped neck', 'Asymmetrical neck',
+    'Princess cut neck', 'Shirt-style neck', 'Illusion neck (net)',
+    'Angrakha neck', 'One-shoulder neck',
+  ],
+  backNeck: [
+    'Square back neck', 'Tie-up (Dori) back', 'Keyhole back', 'Cut-out back',
     'String back', 'Bow-tie back', 'Zip back neck', 'Buttoned back',
     'Corset back', 'Sheer / net back', 'Criss-cross back', 'Potli button back',
-    'Temple design back', 'Tattoo-style back', 'Peep-hole back'
-  ]
+    'Temple design back', 'Tattoo-style back', 'Peep-hole back',
+  ],
+};
+
+const blouseTypes = {
+  frontNeck: [
+    ...blousePhotoDesigns.frontNeck.map(d => d.name),
+    ...blouseExtraDesigns.frontNeck,
+  ],
+  backNeck: [
+    ...blousePhotoDesigns.backNeck.map(d => d.name),
+    ...blouseExtraDesigns.backNeck,
+  ],
 };
 
 // ─────────────────────────────────────────────────
@@ -855,36 +882,80 @@ const SareeTypeSelection = () => {
                   <VibgyorPicker compact selectedColor={selectedBlouseColor} onSelect={setSelectedBlouseColor} />
                 </div>
 
-                <div className="blouse-design-grid" style={{ marginTop: '2.5rem' }}>
-                  <div className="design-block">
+                <div className="saree-blouse-design-row" style={{ marginTop: '2.5rem' }}>
+                  <div className="saree-ds-col">
                     <h3 className="category-label">2. Front Neck Design</h3>
-                    <div className="selection-grid compact">
-                      {blouseTypes.frontNeck.slice(0, 8).map((type, i) => (
-                        <div key={i} className={`selection-card compact ${selectedFrontNeck === type ? 'selected' : ''}`} onClick={() => setSelectedFrontNeck(type)}>
-                          <span className="card-text">{type}</span>
+                    {/* Photo cards for designs with unique studio photos */}
+                    <div className="saree-ds-card-grid">
+                      {blousePhotoDesigns.frontNeck.map((d, i) => (
+                        <div key={i} className={`saree-ds-select-card ${selectedFrontNeck === d.name ? 'selected' : ''}`} onClick={() => setSelectedFrontNeck(d.name)}>
+                          <div className="saree-ds-card-img">
+                            <img src={d.img} alt={d.name} />
+                          </div>
+                          <span className="saree-ds-card-name">{d.name}</span>
                         </div>
                       ))}
                     </div>
+                    {/* Chip pills for additional styles */}
+                    <p className="saree-ds-more-label">More styles:</p>
+                    <div className="saree-ds-chip-row">
+                      {blouseExtraDesigns.frontNeck.map((n, i) => (
+                        <button key={i} className={`saree-ds-chip ${selectedFrontNeck === n ? 'selected' : ''}`} onClick={() => setSelectedFrontNeck(n)}>{n}</button>
+                      ))}
+                    </div>
+                    {selectedFrontNeck && (
+                      <p className="saree-ds-selected-badge">✓ Selected: <strong>{selectedFrontNeck}</strong></p>
+                    )}
                   </div>
-                  <div className="design-block">
+                  <div className="saree-ds-col">
                     <h3 className="category-label">3. Back Neck Design</h3>
-                    <div className="selection-grid compact">
-                      {blouseTypes.backNeck.slice(0, 8).map((type, i) => (
-                        <div key={i} className={`selection-card compact ${selectedBackNeck === type ? 'selected' : ''}`} onClick={() => setSelectedBackNeck(type)}>
-                          <span className="card-text">{type}</span>
+                    <div className="saree-ds-card-grid">
+                      {blousePhotoDesigns.backNeck.map((d, i) => (
+                        <div key={i} className={`saree-ds-select-card ${selectedBackNeck === d.name ? 'selected' : ''}`} onClick={() => setSelectedBackNeck(d.name)}>
+                          <div className="saree-ds-card-img">
+                            <img src={d.img} alt={d.name} />
+                          </div>
+                          <span className="saree-ds-card-name">{d.name}</span>
                         </div>
                       ))}
                     </div>
+                    <p className="saree-ds-more-label">More styles:</p>
+                    <div className="saree-ds-chip-row">
+                      {blouseExtraDesigns.backNeck.map((n, i) => (
+                        <button key={i} className={`saree-ds-chip ${selectedBackNeck === n ? 'selected' : ''}`} onClick={() => setSelectedBackNeck(n)}>{n}</button>
+                      ))}
+                    </div>
+                    {selectedBackNeck && (
+                      <p className="saree-ds-selected-badge">✓ Selected: <strong>{selectedBackNeck}</strong></p>
+                    )}
                   </div>
-                  <div className="design-block">
+                  <div className="saree-ds-col">
                     <h3 className="category-label">4. Sleeve Design</h3>
-                    <div className="selection-grid compact">
-                      {handDesigns.map((type, i) => (
-                        <div key={i} className={`selection-card compact ${selectedHandDesign === type ? 'selected' : ''}`} onClick={() => setSelectedHandDesign(type)}>
-                          <span className="card-text">{type}</span>
+                    <div className="saree-ds-card-grid">
+                      {[
+                        { name: 'Regular short', img: '/blouse-references/hand-regular-short.png' },
+                        { name: 'Elbow length', img: '/blouse-references/hand-elbow-length.png' },
+                        { name: 'Full sleeves', img: '/blouse-references/hand-full-sleeves.png' },
+                        { name: 'Puff sleeves', img: '/blouse-references/hand-puff-sleeves.png' },
+                      ].map((d, i) => (
+                        <div key={i} className={`saree-ds-select-card ${selectedHandDesign === d.name ? 'selected' : ''}`} onClick={() => setSelectedHandDesign(d.name)}>
+                          <div className="saree-ds-card-img">
+                            <img src={d.img} alt={d.name} />
+                          </div>
+                          <span className="saree-ds-card-name">{d.name}</span>
                         </div>
                       ))}
                     </div>
+                    {/* Extra sleeve styles as chips */}
+                    <p className="saree-ds-more-label">More styles:</p>
+                    <div className="saree-ds-chip-row">
+                      {['Bell sleeves', 'Cap sleeves', 'Three-quarter', 'Flared sleeves', 'Sleeveless', 'Cold shoulder', 'Ruffle sleeves', 'Brocade sleeves'].map((n, i) => (
+                        <button key={i} className={`saree-ds-chip ${selectedHandDesign === n ? 'selected' : ''}`} onClick={() => setSelectedHandDesign(n)}>{n}</button>
+                      ))}
+                    </div>
+                    {selectedHandDesign && (
+                      <p className="saree-ds-selected-badge">✓ Selected: <strong>{selectedHandDesign}</strong></p>
+                    )}
                   </div>
                 </div>
 

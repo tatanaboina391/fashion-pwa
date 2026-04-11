@@ -4,30 +4,66 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f8ff; /* Light bluish background like image */
-  font-family: 'Inter', sans-serif;
-  padding: 1rem;
+  background: linear-gradient(135deg, hsl(340, 82%, 96%), hsl(280, 70%, 96%));
+  font-family: var(--font-primary);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-container::before {
+  content: '';
+  position: absolute;
+  width: 50vw;
+  height: 50vw;
+  background: var(--gradient-primary);
+  opacity: 0.05;
+  border-radius: 50%;
+  top: -25vw;
+  right: -25vw;
+  filter: blur(80px);
+  animation: float 20s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, 30px); }
 }
 
 .auth-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
   width: 100%;
-  max-width: 480px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 440px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
   overflow: hidden;
-  animation: slideUp 0.5s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 2;
 }
 
 .auth-header-teal {
-  background-color: #00bfa5; /* The specific teal color */
-  padding: 2rem 1.5rem;
+  background: var(--gradient-primary);
+  padding: 3.5rem 1.5rem;
   text-align: center;
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-header-teal::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm56-76c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6zm-45 37c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6zm54 56c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6zM80 60c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-13-25c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zM9 58c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm66 32c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zM34 39c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zm-3 48c6.627 0 12-5.373 12-12s-5.373-12-12-12-12 5.373-12 12 5.373 12 12 12zm76-48c6.627 0 12-5.373 12-12s-5.373-12-12-12-12 5.373-12 12 5.373 12 12 12zM92 82c7.18 0 13-5.82 13-13s-5.82-13-13-13-13 5.82-13 13 5.82 13 13 13zm-64-52c7.18 0 13-5.82 13-13s-5.82-13-13-13-13 5.82-13 13 5.82 13 13 13zM68 70c8.284 0 15-6.716 15-15s-6.716-15-15-15-15 6.716-15 15 6.716 15 15 15zm-52-32c8.284 0 15-6.716 15-15s-6.716-15-15-15-15 6.716-15 15 6.716 15 15 15z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.3;
 }
 
 .auth-title-large {
-  font-size: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
@@ -44,7 +80,7 @@
 
 /* Segmented Toggle */
 .auth-toggle-container {
-  background-color: #e0f7fa; /* Very light teal bg for toggle track */
+  background-color: var(--color-bg-secondary);
   border-radius: 30px;
   padding: 4px;
   display: flex;
@@ -58,16 +94,16 @@
   padding: 10px;
   border-radius: 25px;
   font-weight: 600;
-  color: #00695c;
+  color: var(--color-text-light);
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 1rem;
 }
 
 .auth-toggle-btn.active {
-  background-color: #00bfa5;
+  background: var(--gradient-primary);
   color: white;
-  box-shadow: 0 2px 5px rgba(0, 191, 165, 0.3);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
 }
 
 /* Form Styles */
@@ -77,7 +113,7 @@
 
 .form-label-teal {
   display: block;
-  color: #00897b;
+  color: var(--color-text);
   font-weight: 600;
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
@@ -100,27 +136,51 @@
 }
 
 .form-input-teal:focus {
-  border-color: #00bfa5;
+  border-color: var(--color-primary);
   background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.1);
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
 }
 
 .btn-teal {
   width: 100%;
-  padding: 14px;
-  background-color: #00bfa5;
+  padding: 16px;
+  background: var(--gradient-primary);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 1.5rem;
+  box-shadow: var(--shadow-md);
 }
 
 .btn-teal:hover {
-  background-color: #00a09d;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  filter: brightness(1.05);
+}
+
+.btn-teal:active {
+  transform: translateY(0);
+}
+
+.form-input-teal.input-error {
+  border-color: #ef4444;
+}
+
+.form-input-teal.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.auth-error-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: #ef4444;
+  margin-top: 0.4rem;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes slideUp {

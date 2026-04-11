@@ -18,57 +18,85 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 app.post("/generate-look", async (req, res) => {
   try {
-    const { selections } = req.body;
+    const { type = 'saree', selections } = req.body;
     if (!selections) {
       return res.status(400).json({ error: "Missing selections" });
     }
 
     // 1. Extract User Selections
-    const fabric = selections.fabric?.name || "Silk";
-    const sareeColor = selections.sareeColor?.name || "Red";
-    const blouseColor = selections.blouseColor?.name || sareeColor;
-    const borderType = selections.borderType?.name || "Zari";
-    const borderWidth = selections.borderWidth?.name || "Wide";
-    const frontNeck = selections.frontNeck?.name || "Deep U Neck";
-    const backNeck = selections.backNeck?.name || "Deep Round Back";
+    const productType = selections.productType || "Classic";
+    const fabric = selections.fabric || "Silk";
+    const baseColor = selections.baseColor?.name || selections.sareeColor?.name || "Red";
+    const blouseColor = selections.blouse?.color?.name || selections.blouseColor?.name || baseColor;
+    const borderType = selections.border?.type || selections.borderType || "None";
+    const frontNeck = selections.blouse?.frontNeck || selections.frontNeck || "Round neck";
+    const backNeck = selections.blouse?.backNeck || selections.backNeck || "Deep U-back";
+    const handDesign = selections.blouse?.handDesign || selections.handDesign || "Regular Short";
+    const embellishments = selections.embellishments || selections.designs || [];
+    
+    let dupattaInfo = "";
+    if (type !== 'saree' && selections.dupatta) {
+      dupattaInfo = ` with a ${selections.dupatta.color?.name || baseColor} ${selections.dupatta.fabric || 'Net'} dupatta`;
+    }
 
-    console.log("Generating look for:", {
+    console.log(`Generating ${type} look for:`, {
+      productType,
       fabric,
-      sareeColor,
+      baseColor,
       blouseColor,
       frontNeck,
       backNeck,
+      handDesign,
+      embellishments
     });
 
     // 2. Generate Text Description
-    // Using gemini-2.0-flash by default as requested
-    let description = "An elegant custom saree designed for you.";
+    let description = `An elegant custom ${type} designed for you.`;
     try {
       const model = genAI.getGenerativeModel({
-        model: "gemini-robotics-er-1.5-preview",
+        model: "gemini-1.5-flash",
       });
-      const textPrompt = `Describe a luxury custom saree:
+      
+      const designDetails = embellishments.length > 0 ? ` featuring ${embellishments.join(', ')}` : "";
+      
+      const textPrompt = `Describe a luxury custom ${type} ensemble:
+            - Style: ${productType}
+            - Main Color: ${baseColor}
             - Fabric: ${fabric}
-            - Saree Color: ${sareeColor}
-            - Blouse Color: ${blouseColor}
-            - Blouse Design: ${frontNeck} front, ${backNeck} back.
-            Write one short, elegant paragraph (max 30 words).`;
+            - Blouse: ${blouseColor} color, ${frontNeck} front, ${backNeck} back, ${handDesign} sleeves.
+            ${dupattaInfo ? `- Dupatta: ${dupattaInfo}` : ""}
+            - Work: ${designDetails}
+            Write one short, elegant paragraph (max 30 words) for a fashion catalog.`;
 
       const textResult = await model.generateContent(textPrompt);
       const textResponse = await textResult.response;
       description = textResponse.text();
     } catch (err) {
       console.error("Text Gen Error:", err.message);
-      // Fallback description
-      description = `A stunning ${sareeColor} ${fabric} saree featuring a matching blouse.`;
+      description = `A stunning ${baseColor} ${fabric} ${type} featuring a matching ${blouseColor} blouse with ${frontNeck} and ${backNeck} design.`;
     }
 
-    // 3. Generate Image (Imagen 4.0 via REST)
-    let imageBase64 = null;
-
-    const imagePrompt = `A photorealistic full-body shot of an elegant Indian woman wearing a ${sareeColor} ${fabric} saree with a ${borderWidth} ${borderType} border. 
-        She is wearing a matching ${blouseColor} blouse.
-        High fashion photography, studio lighting, detailed embroidery, 8k resolution, cinematic look.`;
+    // 3. Generate Image Prompt based on type
+    let imagePrompt = "";
+    const commonStyle = "High fashion photography, studio lighting, professional model, editorial style, 8k resolution, cinematic look, highly detailed fabric texture.";
+    
+    if (type === 'lehanga') {
+      imagePrompt = `A photorealistic full-body shot of a professional Indian fashion model wearing a luxury bridal ${productType}. 
+        The flared lehanga skirt is ${baseColor} ${fabric}${embellishments.length > 0 ? ' with ' + embellishments.join(' and ') : ''}. 
+        She is wearing a matching ${blouseColor} blouse with ${frontNeck} and ${handDesign} sleeves${dupattaInfo}.
+        ${commonStyle}`;
+    } else if (type === 'half-saree') {
+      imagePrompt = `A photorealistic full-body shot of a professional Indian fashion model wearing a traditional ${baseColor} ${fabric} half-saree (Langa Voni). 
+        The skirt is ${baseColor} and she has a ${dupattaInfo} elegantly draped. 
+        Matching ${blouseColor} blouse with ${frontNeck}.
+        ${commonStyle}`;
+    } else {
+      // Default: Saree
+      imagePrompt = `A photorealistic full-body shot of a professional Indian fashion model wearing an elegant ${baseColor} ${fabric} ${productType} saree. 
+        Matching ${blouseColor} blouse with ${frontNeck} and ${backNeck}. 
+        Border is ${borderType}.
+        ${commonStyle}`;
+    }
 
     // 3. Generate Image (Cloudflare Stable Diffusion XL)
     const generateImageCloudflare = async () => {
@@ -110,7 +138,7 @@ app.post("/generate-look", async (req, res) => {
       }
     };
 
-    imageBase64 = await generateImageCloudflare();
+    const imageBase64 = await generateImageCloudflare();
 
     res.json({
       description,
